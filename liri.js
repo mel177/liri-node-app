@@ -1,3 +1,6 @@
+//using .env to hide keys
+require("dotenv").config();
+
 var keys = require('./keys');
 var twitterCredentials = keys.twitterKeys;
 
