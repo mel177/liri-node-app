@@ -1,10 +1,13 @@
 //using .env to hide 
 require("dotenv").config();
 
+// calling npm install files
+
 var keys = require('./keys');
 var twitterCredentials = keys.twitterKeys;
 var Spotify = require('node-spotify-api');
 var request = require("request");
+var fs = require('fs');
 
 var searchTerm = '';
 for(var i = 3; i < process.argv.length; i++){
@@ -67,7 +70,7 @@ var myTweets = function() {
 var spotifyThisSong = function(trackQuery){
 
 if (trackQuery === undefined){
-    trackQuery = "the sign ace of base";
+    trackQuery = "let it go";
 
 }
 
@@ -90,6 +93,18 @@ bacon.search({ type: 'track', query: trackQuery }, function(error, data) {
          
 });
 }
+
+//  do what it says function, reads and write module, access random.txt
+function doWhatItSays(){
+    fs.readFile("random.txt", "utf8", function(error, data){
+        if(!error){
+            doWhatItSaysResults = data.split(",");
+            spotifyThisSong(doWhatItSaysResults[0], doWhatItSaysResults[1]);
+        } else{
+            console.log("Error occurred" + error);
+        }
+    })
+}
 // what the user will use to call the commands
 if(command === "my-tweets"){
     myTweets();
@@ -97,5 +112,10 @@ if(command === "my-tweets"){
 else if (command === "spotify-this-song"){
     spotifyThisSong(query);
 }
-
+else if (command === "movie-this") {
+        movieFinder();
+}
+else if(command === "do-what-it-says"){
+    doWhatItSays();
+}
 
