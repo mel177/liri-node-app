@@ -17,7 +17,7 @@ for(var i = 3; i < process.argv.length; i++){
 console.log("This is our Search Term: " + searchTerm)
 
 var command = process.argv[2];
-// var query = process.argv[3];
+var movie = process.argv[3];
 
 var query = searchTerm;
 
@@ -94,14 +94,14 @@ bacon.search({ type: 'track', query: trackQuery }, function(error, data) {
 });
 }
 // movie function 
-function movieFinder(){
-    var movie = process.argv[3];
-    if(!movie){
+function movieFinder(movie){
+    // var movie = process.argv[3];
+    if(movie === null){
         movie = "frozen";
     }
-    params = movie
-    request("http://www.omdbapi.com/?t=" + params + "&y=&plot=short&r=json&tomatoes=true", function (error, response, body) {
-        if (!error && response.statusCode == 200) {
+    // params = movie
+    request("http://www.omdbapi.com/?i=tt3896198&apikey=51a0f9a7" + movie + "&y=&plot=short&r=json&tomatoes=true", function (error, response, body) {
+        if (!error && response.statusCode === 200) {
             var movieObject = JSON.parse(body);
             //console.log(movieObject); // Show the text in the terminal
             var movieResults =
@@ -129,14 +129,10 @@ function movieFinder(){
 
 //  do what it says function, reads and write module, access random.txt
 function doWhatItSays(){
-    fs.readFile("random.txt", "utf8", function(error, data){
-        if(!error){
-            doWhatItSaysResults = data.split(",");
-            spotifyThisSong(doWhatItSaysResults[0], doWhatItSaysResults[1]);
-        } else{
-            console.log("Error occurred" + error);
-        }
-    })
+    fs.readFile('random.txt', 'utf8', function(error, data){
+          var txt = data.split(',');
+    spotifyThisSong(txt[1]);
+    });
 }
 // what the user will use to call the commands
 if(command === "my-tweets"){
@@ -146,7 +142,7 @@ else if (command === "spotify-this-song"){
     spotifyThisSong(query);
 }
 else if (command === "movie-this") {
-        movieFinder();
+        movieFinder(movie);
 }
 else if(command === "do-what-it-says"){
     doWhatItSays();
