@@ -95,36 +95,26 @@ bacon.search({ type: 'track', query: trackQuery }, function(error, data) {
 }
 // movie function 
 function movieFinder(movie){
-    // var movie = process.argv[3];
-    if(movie === null){
-        movie = "frozen";
-    }
-    // params = movie
-    request("http://www.omdbapi.com/?i=tt3896198&apikey=51a0f9a7" + movie + "&y=&plot=short&r=json&tomatoes=true", function (error, response, body) {
-        if (!error && response.statusCode === 200) {
-            var movieObject = JSON.parse(body);
-            //console.log(movieObject); // Show the text in the terminal
-            var movieResults =
-            "Title: " + movieObject.Title+"\r\n"+
-            "Year: " + movieObject.Year+"\r\n"+
-            "Imdb Rating: " + movieObject.imdbRating+"\r\n"+
-            "Country: " + movieObject.Country+"\r\n"+
-            "Language: " + movieObject.Language+"\r\n"+
-            "Plot: " + movieObject.Plot+"\r\n"+
-            "Actors: " + movieObject.Actors+"\r\n"+
-            "Rotten Tomatoes Rating: " + movieObject.tomatoRating+"\r\n"+
-            "Rotten Tomatoes URL: " + movieObject.tomatoURL + "\r\n" + 
-            
-            console.log(movieResults);
-            log(movieResults); // calling log function
-        } else {
-            console.log("Error :"+ error);
-            return;
+    
+        if (!movie) {
+            movie = "Mr. Nobody."
         }
-    });
-};
-
-
+        let queryUrl = "http://www.omdbapi.com/?t=" + movie + "&tomatoes=true&y=&plot=short&apikey=trilogy";
+        request(queryUrl, function(error, response, body) {
+            if (!error && response.statusCode === 200) {
+    
+              console.log("The movie's title is: " + JSON.parse(body).Title);
+              console.log(JSON.parse(body).Title + ' came out in ' + JSON.parse(body).Year);
+              console.log('The IMDB rating for ' + JSON.parse(body).Title + ' is ' + JSON.parse(body).imdbRating);
+              console.log('The Rotten Tomatoes rating for ' + JSON.parse(body).Title + ' is ' + JSON.parse(body).Ratings[1].Value);
+              console.log(JSON.parse(body).Title + ' was made in ' + JSON.parse(body).Country);
+              console.log(JSON.parse(body).Language + ' is spoken in ' + JSON.parse(body).Title);
+              console.log('The plot is ' + JSON.parse(body).Plot);
+              console.log('The principal actors in ' + JSON.parse(body).Title + ' are: ' + JSON.parse(body).Actors + '.');
+            } 
+    
+        });
+    }
 
 
 //  do what it says function, reads and write module, access random.txt
@@ -134,6 +124,7 @@ function doWhatItSays(){
     spotifyThisSong(txt[1]);
     });
 }
+
 // what the user will use to call the commands
 if(command === "my-tweets"){
     myTweets();
